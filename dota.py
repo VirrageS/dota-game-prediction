@@ -10,6 +10,7 @@ def unique(items):
 	for item in items:
 		if item not in found:
 			found.add(item)
+			keep.append(item)
 
 	return list(keep)
 
