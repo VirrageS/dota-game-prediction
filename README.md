@@ -6,6 +6,6 @@ Scored: 23.20 points (about 61.6% correct)
 
 # Usage
 
-  python3 dota.py < input_3000.in > tmp.out;
+    python3 dota.py < input_3000.in > tmp.out;
   
 Then you can compare how different is our `tmp.out` from `output_3000.out`.
