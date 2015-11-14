@@ -1,4 +1,4 @@
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, SGDClassifier, Perceptron
 import sys
 import numpy as np
 
@@ -58,7 +58,9 @@ for game in range(0, games):
 
 
 # train model
-model = LogisticRegression(C=0.1).fit(X, Y)
+logistic = LogisticRegression(C=0.1).fit(X, Y) # 23.20 poiints
+sgd = SGDClassifier(alpha=0.001, n_iter=300).fit(X,Y) # 23.00 points
+perceptor = Perceptron().fit(X,Y) # 12.00 points
 
 # now we want to predict
 # results from the input
@@ -74,6 +76,8 @@ for game in range(0, numberOfGames):
 		Z[game, championsID[champion]] = -1
 
 # print predicted labels
-predictions = model.predict(Z)
+predictions = logistic.predict(Z)
+# predictions = sgd.predict(Z)
+# predictions = perceptor.predict(Z)
 for prediction in predictions:
 	print(prediction)
