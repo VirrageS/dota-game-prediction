@@ -1,4 +1,4 @@
-from sklearn.linear_model import LogisticRegression, SGDClassifier, Perceptron
+from sklearn.linear_model import LogisticRegression, SGDClassifier, Perceptron, LinearRegression
 import sys
 import numpy as np
 
@@ -59,6 +59,7 @@ for game in range(0, games):
 
 # train model
 logistic = LogisticRegression(C=0.1).fit(X, Y) # 23.20 poiints
+linear = LinearRegression().fit(X, Y) # about the same as logistic regressions
 sgd = SGDClassifier(alpha=0.001, n_iter=300).fit(X,Y) # 23.00 points
 perceptor = Perceptron().fit(X,Y) # 12.00 points
 
@@ -77,6 +78,7 @@ for game in range(0, numberOfGames):
 
 # print predicted labels
 predictions = logistic.predict(Z)
+# predictions = linear.predict(Z)
 # predictions = sgd.predict(Z)
 # predictions = perceptor.predict(Z)
 for prediction in predictions:
