@@ -1,4 +1,6 @@
 from sklearn.linear_model import LogisticRegression, SGDClassifier, Perceptron, LinearRegression
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.svm import SVC
 import sys
 import numpy as np
 
@@ -58,10 +60,15 @@ for game in range(0, games):
 
 
 # train model
-logistic = LogisticRegression(C=0.1).fit(X, Y) # 23.20 poiints
-linear = LinearRegression().fit(X, Y) # about the same as logistic regressions
-sgd = SGDClassifier(alpha=0.001, n_iter=300).fit(X,Y) # 23.00 points
-perceptor = Perceptron().fit(X,Y) # 12.00 points
+logistic = LogisticRegression(C=0.1) # 23.20 poiints
+linear = LinearRegression() # about the same as logistic regressions
+sgd = SGDClassifier(alpha=0.001, n_iter=300) # 23.00 points
+
+# train
+rfr = RandomForestClassifier(n_estimators=100, min_samples_split=4, min_samples_leaf=2)
+abr = AdaBoostClassifier(base_estimator=rfr, n_estimators=200, learning_rate=0.001)
+
+models = [logistic, linear, sgd, abr]
 
 # now we want to predict
 # results from the input
@@ -76,10 +83,27 @@ for game in range(0, numberOfGames):
 	for champion in line[5:]:
 		Z[game, championsID[champion]] = -1
 
+# load output
+output = []
+with open('output_3000.out', 'r') as f:
+	for line in f:
+		output.append(int(line))
+
 # print predicted labels
-predictions = logistic.predict(Z)
-# predictions = linear.predict(Z)
-# predictions = sgd.predict(Z)
-# predictions = perceptor.predict(Z)
-for prediction in predictions:
-	print(prediction)
+for model in models:
+	predictions = model.fit(X,Y).predict(Z)
+
+	good = 0
+	for idx, prediction in enumerate(predictions):
+		# we need to check if predictions are not floats
+		# we want to compare int's only
+		if isinstance(prediction, float):
+			prediction = 2 if prediction >= 1.5 else 1
+
+		if output[idx] == prediction:
+			good += 1
+
+	print(model)
+	print('Good: ' + str(good))
+	print('Wrong: ' + str(len(output) - good))
+	print('')
